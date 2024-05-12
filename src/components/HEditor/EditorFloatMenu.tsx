@@ -9,6 +9,8 @@ import {
   CommandList,
   CommandSeparator,
 } from "../shadcn/ui/command";
+import { Transforms } from "slate";
+import { CustomEditor } from "./types";
 
 const options = [
   {
@@ -17,7 +19,12 @@ const options = [
       {
         title: "标题一",
         key: "h1",
-        onClick: () => {},
+        onClick: (editor: CustomEditor) => {
+          Transforms.setNodes(editor, {
+            type: "heading",
+            level: 1,
+          });
+        },
       },
     ],
   },
@@ -27,7 +34,7 @@ const options = [
       {
         title: "加粗",
         key: "bold",
-        onClick: () => {},
+        onClick: (editor: CustomEditor) => {},
       },
     ],
   },
@@ -40,7 +47,10 @@ const optionChildren = options.reduce(
   [] as (typeof options)[0]["children"]
 );
 
-const EditorFloatMenu = (props: { onClose?: () => void }) => {
+const EditorFloatMenu = (props: {
+  onClose?: () => void;
+  editor: CustomEditor;
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useClickAway(() => {
@@ -80,13 +90,13 @@ const EditorFloatMenu = (props: { onClose?: () => void }) => {
                   return (
                     <CommandItem
                       onSelect={() => {
-                        d.onClick?.();
+                        d.onClick?.(props.editor);
                         props.onClose?.();
                       }}
                       key={d.key}
                       value={d.key}
                       onClick={() => {
-                        d.onClick?.();
+                        d.onClick?.(props.editor);
                         props.onClose?.();
                       }}
                     >

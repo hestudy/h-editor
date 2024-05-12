@@ -11,12 +11,16 @@ import {
 import "src/index.css";
 import EditorFloatMenu from "./EditorFloatMenu";
 import Paragraph from "./elements/Paragraph";
+import Heading from "./elements/Heading";
 
 export type HEditorProps = {
   className?: string;
 };
 
 const renderElement = (props: RenderElementProps) => {
+  if (props.element.type === "heading") {
+    return <Heading {...props} />;
+  }
   return <Paragraph {...props} />;
 };
 
@@ -54,6 +58,7 @@ const HEditor = (props: HEditorProps) => {
               });
               ReactEditor.focus(editor);
             }}
+            editor={editor}
           ></EditorFloatMenu>
         </div>
       )}
@@ -67,6 +72,7 @@ const HEditor = (props: HEditorProps) => {
         ]}
       >
         <Editable
+          autoFocus
           className="h-full outline-0"
           renderElement={renderElement}
           onKeyDown={(e) => {
